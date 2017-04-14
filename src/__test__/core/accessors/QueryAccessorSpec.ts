@@ -129,5 +129,26 @@ describe("QueryAccessor", ()=> {
       ])
     ]))
   })
+  
+    it("prefixQueryFields with options change default type", ()=> {
+    this.accessor = new QueryAccessor("q", {
+      prefixQueryFields:["title"],
+      prefixQueryOptions: {
+        type:"cross_fields"
+      }
+    })
+    let query = new ImmutableQuery()
+    this.accessor.state = new ValueState("some query")
+    query = this.accessor.buildSharedQuery(query)
+    expect(query.query.query).toEqual(BoolMust([
+      BoolShould([
+        SimpleQueryString("some query", {fields:["_all"]}),
+        MultiMatchQuery("some query", {
+          type:"cross_fields",
+          fields:["title"]
+        })
+      ])
+    ]))
+  })
 
 })
