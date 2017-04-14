@@ -48,10 +48,11 @@ export class QueryAccessor extends BaseQueryAccessor {
 
       if (this.options.prefixQueryFields) {
         queries.push(MultiMatchQuery(queryStr, assign(
-          this.options.prefixQueryOptions, {
+          {
             type:"phrase_prefix",
             fields:this.options.prefixQueryFields,
-          }
+          },
+          this.options.prefixQueryOptions
         )))
       }
       query = query.addQuery(BoolShould(queries))
